@@ -1,0 +1,49 @@
+- apt: name={{ item }}
+  with_items:
+    - binutils
+    - make
+    - gcc
+    - g++
+    - openssl
+    - libssl-dev
+    - python-dev
+    - libffi-dev
+
+- name: Add user {{ letsencrypt_user }}
+  user:
+    name: "{{ letsencrypt_user }}"
+    shell: /bin/bash
+
+- name: Update repositories cache
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{ cache_valid_time }}"
+
+- name: Install python-pip
+  apt:
+    name: python-pip
+
+- name: Update python pip
+  pip:
+    name: pip
+    state: latest
+
+- name: Update python requests
+  pip:
+    name: requests
+    state: latest
+
+- name: Update python setuptools
+  pip:
+    name: setuptools
+    state: latest
+
+- name: Update python six
+  pip:
+    name: six
+    state: latest
+
+- name: Install Letsencrypt {{ letsencrypt_version }}
+  pip:
+    name: certbot
+    version: "{{ letsencrypt_version }}"

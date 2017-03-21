@@ -1,0 +1,9 @@
+- name: "Add cron task for letsencrypt renew"
+  cron:
+    name: "letsencrypt renew"
+    minute: "30"
+    hour: "2"
+    weekday: "1"
+    cron_file: "letsencrypt"
+    user: "root"
+    job: "/usr/local/bin/certbot renew --renew-hook '/etc/init.d/haproxy reload' > /dev/null"

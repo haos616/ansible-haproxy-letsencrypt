@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: Haos616
+  description: Role to use Letsencrypt with haproxy
+  license: MIT
+  min_ansible_version: 2.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - precise
+  - name: Debian
+    versions:
+    - wheezy
+  categories:
+  - docker

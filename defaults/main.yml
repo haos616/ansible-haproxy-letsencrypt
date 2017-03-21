@@ -1,0 +1,14 @@
+cache_valid_time: 3600
+
+letsencrypt_user: "letsencrypt"
+letsencrypt_version: "0.12.0"
+letsencrypt_certs: []
+letsencrypt_ip: "127.0.0.1"
+letsencrypt_port: "5555"
+letsencrypt_data_dir: "/etc/letsencrypt"
+letsencrypt_haproxy_cert_template: "haproxy.pem.j2"
+letsencrypt_haproxy_cert_dir: "/etc/haproxy/certs"
+letsencrypt_domain: "{{ item.domains.0 }}"
+
+letsencrypt_ssl_certificate: "{{ letsencrypt_data_dir }}/live/{{ letsencrypt_domain }}/fullchain.pem"
+letsencrypt_ssl_certificate_key: "{{ letsencrypt_data_dir }}/live/{{ letsencrypt_domain }}/privkey.pem"

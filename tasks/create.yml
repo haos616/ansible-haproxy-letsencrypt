@@ -1,0 +1,8 @@
+- assert:
+    that:
+     - "letsencrypt_admin_email is defined"
+     - "letsencrypt_certs is defined"
+
+- name: Create letsencrypt certs
+  shell: "certbot certonly -n --standalone{% for domain in item.domains %} -d {{ domain }}{% endfor %} --text --agree-tos --email {{ letsencrypt_admin_email }} --post-hook='cat {{ letsencrypt_ssl_certificate }} {{ letsencrypt_ssl_certificate_key }} > {{ letsencrypt_haproxy_cert_dir }}/{{ letsencrypt_domain }}.pem' --server https://acme-v01.api.letsencrypt.org/directory --rsa-key-size 4096 --verbose --keep-until-expiring --standalone-supported-challenges http-01 --http-01-port {{ letsencrypt_port }}"
+  with_items: "{{ letsencrypt_certs }}"

@@ -1,0 +1,45 @@
+global
+    tune.ssl.default-dh-param 2048
+    ssl-default-bind-ciphers EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH
+    ssl-default-bind-options no-sslv3
+    crt-base {{ haproxy_certs_dir }}
+
+defaults
+    mode http
+
+frontend www-http
+    bind {{ haproxy_ip }}:80
+    acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+    use_backend letsencrypt-backend if letsencrypt-acl
+    default_backend redirect-backend
+
+backend redirect-backend
+    redirect scheme https
+
+backend letsencrypt-backend
+   server letsencrypt {{ letsencrypt_ip }}:{{ letsencrypt_port }}
+
+frontend www-https
+    option http-server-close
+    option httpclose
+
+    option forwardfor
+    option forwardfor header X-Real-IP
+    http-request set-header X-Forwarded-Proto https
+
+    bind {{ haproxy_ip }}:443 ssl crt {{ haproxy_certs_dir }}
+
+    http-response set-header Strict-Transport-Security max-age=16000000;\ includeSubDomains;\ preload
+    http-response set-header X-Frame-Options DENY
+    {% for domain in haproxy_domains %}
+
+    use_backend {{ domain.name }}-backend if { ssl_fc_sni {{ domain.name }} }
+    {% endfor %}
+
+
+{% for domain in haproxy_domains %}
+backend {{ domain.name }}-backend
+    server www-{{ domain.name }} {{ domain.host }}:{{ domain.port }} check
+
+
+{% endfor %}
