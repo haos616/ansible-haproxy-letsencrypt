@@ -19,6 +19,7 @@ backend redirect-backend
 backend letsencrypt-backend
    server letsencrypt {{ letsencrypt_ip }}:{{ letsencrypt_port }}
 
+{% if haproxy_certs_dir_find.matched > 0 %}
 frontend www-https
     option http-server-close
     option httpclose
@@ -43,3 +44,5 @@ backend {{ domain.name }}-backend
 
 
 {% endfor %}
+
+{% endif %}
