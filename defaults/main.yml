@@ -1,7 +1,7 @@
 cache_valid_time: 3600
 
 letsencrypt_user: "letsencrypt"
-letsencrypt_version: "0.12.0"
+letsencrypt_version: '0.14.1'
 letsencrypt_certs: []
 letsencrypt_ip: "127.0.0.1"
 letsencrypt_port: "5555"
